@@ -108,3 +108,6 @@ public interface OnItemClickListener{
       void SubItemClick(View itemView, int position);
 }
 ```
+
+## 效果图
+![加载失败](expand.gif '')
