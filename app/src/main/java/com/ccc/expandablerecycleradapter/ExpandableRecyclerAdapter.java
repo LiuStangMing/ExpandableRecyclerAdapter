@@ -113,7 +113,6 @@ public abstract class ExpandableRecyclerAdapter<T extends ItemBean, K> extends R
         for (int i = 0; i < expands.size(); i++) {
             ItemBean bean = mDataList.get(i);
             boolean isExpand = expands.get(i);
-//
             if (isExpand) {
                 count += bean.getSubItems().size() + 1;
             } else {
@@ -128,7 +127,7 @@ public abstract class ExpandableRecyclerAdapter<T extends ItemBean, K> extends R
         return getItemStatusByPosition(position).getViewType();
     }
 
-    private ItemStatus getItemStatusByPosition(int position) {
+    public ItemStatus getItemStatusByPosition(int position) {
         ItemStatus status = new ItemStatus();
 
         int currPos = 0;
@@ -175,8 +174,12 @@ public abstract class ExpandableRecyclerAdapter<T extends ItemBean, K> extends R
         notifyDataSetChanged();
     }
 
-    protected List<T> getmDataList() {
+    protected List<T> getDataList() {
         return mDataList;
+    }
+
+    protected List<Boolean> getExpands(){
+        return expands;
     }
 
     protected T getGroupItem(ItemStatus status){
@@ -186,6 +189,11 @@ public abstract class ExpandableRecyclerAdapter<T extends ItemBean, K> extends R
     protected K getSubItem(ItemStatus status){
         T t = getGroupItem(status);
         return (K) t.getSubItems().get(status.getSubItemIndex());
+    }
+
+    public boolean isExpandByPosition(int position){
+        ItemStatus status = getItemStatusByPosition(position);
+        return expands.get(status.getGroupItemIndex());
     }
 
     private void initExpand() {
