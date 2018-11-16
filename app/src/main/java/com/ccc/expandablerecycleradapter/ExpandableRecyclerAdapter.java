@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,17 +17,26 @@ import java.util.List;
  */
 public abstract class ExpandableRecyclerAdapter<T extends ItemBean, K> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    protected static final int TYPE_GROUPITEM = 0;
-    protected static final int TYPE_SUBITEM = 1;
+    /**
+     * 一级列表
+     */
+    public static final int TYPE_GROUPITEM = 0;
+    /**
+     * 二级列表
+     */
+    public static final int TYPE_SUBITEM = 1;
 
     private List<T> mDataList;
+    /**
+     * 展开集合
+     */
     private List<Boolean> expands;
 
     private LayoutInflater mInflater;
 
     public interface OnItemClickListener{
-        void GroupItemClick(View itemView, int position);
-        void SubItemClick(View itemView, int position);
+        void GroupItemClick(RecyclerView.ViewHolder holder, int position);
+        void SubItemClick(RecyclerView.ViewHolder holder, int position);
     }
 
     private OnItemClickListener listener;
@@ -64,7 +72,6 @@ public abstract class ExpandableRecyclerAdapter<T extends ItemBean, K> extends R
                     int groupItem = status.getGroupItemIndex();
 
                     if (!expands.get(status.getGroupItemIndex())) {
-//                        reset();
                         expands.set(groupItem, true);
                         notifyItemRangeInserted(pos + 1, bean.getSubItems().size());
                         notifyItemRangeChanged(pos + 1, getItemCount() - pos);
@@ -75,7 +82,7 @@ public abstract class ExpandableRecyclerAdapter<T extends ItemBean, K> extends R
                     }
 
                     if (listener != null){
-                        listener.GroupItemClick(holder.itemView, pos);
+                        listener.GroupItemClick(holder, pos);
                     }
                 }
             });
@@ -87,7 +94,7 @@ public abstract class ExpandableRecyclerAdapter<T extends ItemBean, K> extends R
                 @Override
                 public void onClick(View v) {
                     if (listener != null){
-                        listener.SubItemClick(holder.itemView, pos);
+                        listener.SubItemClick(holder, pos);
                     }
                 }
             });
@@ -156,12 +163,13 @@ public abstract class ExpandableRecyclerAdapter<T extends ItemBean, K> extends R
      */
     public void setItemBeans(List<T> datas){
 
-        if (this.mDataList != null){
-            this.mDataList.clear();
-            this.mDataList.addAll(datas);
-        }else{
-            this.mDataList = datas;
+        if (mDataList != null){
+            mDataList.clear();
+            mDataList.addAll(datas);
+        } else {
+            mDataList = datas;
         }
+
         initExpand();
 
         notifyDataSetChanged();
