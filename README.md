@@ -103,9 +103,9 @@ public class GroupViewHolder extends RecyclerView.ViewHolder{
 ```java
 public interface OnItemClickListener{
       //点击一级列表
-      void GroupItemClick(View itemView, int position);
+      void GroupItemClick(RecyclerView.ViewHolder holder, int position);
       //点击二级列表
-      void SubItemClick(View itemView, int position);
+      void SubItemClick(RecyclerView.ViewHolder holder, int position);
 }
 ```
 
